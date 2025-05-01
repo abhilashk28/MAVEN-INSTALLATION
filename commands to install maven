@@ -1,0 +1,23 @@
+sudo yum update -y
+  sudo amazon-linux-extras install java-openjdk11 -y
+# Or for Java 17:
+# sudo amazon-linux-extras install java-openjdk17 -y
+  # Set the version you want to install (replace X.X.X with the latest version)
+MAVEN_VERSION="3.9.6"
+
+# Download Maven
+wget https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz -P /tmp
+sudo tar xf /tmp/apache-maven-${MAVEN_VERSION}-bin.tar.gz -C /opt
+  sudo ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven
+  # Create a maven.sh file in /etc/profile.d/
+sudo tee /etc/profile.d/maven.sh <<EOF
+export M2_HOME=/opt/maven
+export PATH=\${M2_HOME}/bin:\${PATH}
+EOF
+
+# Make the script executable
+sudo chmod +x /etc/profile.d/maven.sh
+
+# Source the file to apply changes to current session
+source /etc/profile.d/maven.sh
+  mvn -version
